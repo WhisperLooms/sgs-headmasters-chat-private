@@ -1,0 +1,15 @@
+FROM postgres:15
+
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    postgresql-15-pgvector \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy SQL setup files
+COPY scripts/setup-db.sql /docker-entrypoint-initdb.d/
+COPY scripts/pgvector-setup.sql /docker-entrypoint-initdb.d/
+
+# Set environment variables
+ENV POSTGRES_DB=sgs_chat
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=your_password

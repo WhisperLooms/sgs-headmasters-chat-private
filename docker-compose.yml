@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.supabase-pgvector
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: sgs_chat
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
+
+  supabase:
+    image: supabase/supabase-postgres:latest
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_PASSWORD: your_supabase_password
+    volumes:
+      - supabase-data:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  supabase-data:
